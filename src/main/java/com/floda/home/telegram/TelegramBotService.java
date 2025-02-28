@@ -44,6 +44,12 @@ public class TelegramBotService extends TelegramLongPollingBot {
                 users.add(chatId);
                 sendMessage(chatId, "✅ Вы подписаны на уведомления о заказах!");
                 log.info(chatId + " подписался на уведомления.");
+            } else if (text.equalsIgnoreCase("/stop")) {
+                if (users.contains(chatId)) {
+                    users.remove(chatId);
+                    sendMessage(chatId, "❌ Вы отключили уведомления о заказах.");
+                    log.info(chatId + " отключил уведомления.");
+                }
             }
         }
     }
