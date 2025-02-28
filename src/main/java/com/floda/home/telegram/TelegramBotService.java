@@ -36,6 +36,11 @@ public class TelegramBotService extends TelegramLongPollingBot {
             String text = update.getMessage().getText();
 
             if (text.equalsIgnoreCase("/start")) {
+                if (users.contains(chatId)) {
+                    sendMessage(chatId, "⚠\uFE0F Вы уже подписаны на уведомления о заказах!");
+                    log.info(chatId + " уже подписан на уведомления!");
+                    return;
+                }
                 users.add(chatId);
                 sendMessage(chatId, "✅ Вы подписаны на уведомления о заказах!");
                 log.info(chatId + " подписался на уведомления.");
