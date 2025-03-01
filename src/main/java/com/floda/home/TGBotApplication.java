@@ -10,7 +10,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class TGBotApplication {
 
     private static final Logger log = LoggerFactory.getLogger(TGBotApplication.class);
-    private static OzonService ozonService;  // Сохраняем в поле класса
+    private static OzonService ozonService;
 
     public static void main(String[] args) {
         try {

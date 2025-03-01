@@ -10,6 +10,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class OzonClient {
@@ -26,7 +29,10 @@ public class OzonClient {
     public static Set<String> getNewOrders() throws Exception {
         Set<String> newOrders = new HashSet<>();
 
-        String requestBody = "{ \"dir\": \"ASC\", \"filter\": { \"since\": \"2025-02-27T00:00:00Z\" }, \"limit\": 10 }";
+        String currentTime = Instant.now().atOffset(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_INSTANT);
+
+        String requestBody = String.format("{ \"dir\": \"ASC\", \"filter\": { \"since\": \"%s\" }, \"limit\": 10 }", currentTime);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(API_URL))
