@@ -1,5 +1,6 @@
 package com.floda.home.ozon;
 
+import com.floda.home.model.Order;
 import com.floda.home.telegram.TelegramBotService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +28,21 @@ public class OzonService {
     private void checkForOrders() {
         try {
             log.info("Проверяю новые заказы ...");
-            Set<String> newOrders = OzonClient.getNewOrders();
-            for (String order : newOrders) {
-                String message = "📦 Новый заказ! Номер: " + order;
-                bot.sendOrderNotification(message);
+            Set<Order> newOrders = OzonClient.getNewOrders();  // Получаем новые заказы с подробной информацией
+            for (Order order : newOrders) {
+                String message = "📦 Новый заказ: \n" +
+                        "🆔 Номер: " + order.getOrderId() + "\n" +
+                        "💰 Сумма: " + order.getTotalAmount() + " руб.\n" +
+                        "💼 Товар: " + order.getProductName() + "\n" +
+                        "🔢 Количество: " + order.getQuantity();
+
+                // Если есть картинка товара, прикрепляем её
+                if (order.getProductImageUrl() != null) {
+                    bot.sendOrderNotification(message, order.getProductImageUrl());
+                } else {
+                    bot.sendOrderNotification(message, null);
+                }
+
                 log.info("✅ Уведомление отправлено: {}", message);
             }
         } catch (Exception e) {
